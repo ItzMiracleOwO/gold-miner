@@ -2,42 +2,42 @@
 > * 原文作者：[Chrys Bader](https://medium.com/@chrysb)
 > * 译文出自：[掘金翻译计划](https://github.com/xitu/gold-miner)
 > * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/article/2021/swiftui-2021-the-good-the-bad-and-the-ugly.md](https://github.com/xitu/gold-miner/blob/master/article/2021/swiftui-2021-the-good-the-bad-and-the-ugly.md)
-> * 译者：
+> * 译者：[ItzMiracleOwO](https://github.com/itzmiracleowo)
 > * 校对者：
 
-# SwiftUI in 2021: The Good, the Bad, and the Ugly
+# 2021 的 SwiftUI : 好处、坏处以及丑处
 
-> SwiftUI in production? **Still a no-go.**
+> 有生产力的 SwiftUI? **依旧不行.**
 
-![Photo by [Maxwell Nelson](https://unsplash.com/@maxcodes?utm_source=medium&utm_medium=referral) on [Unsplash](https://unsplash.com?utm_source=medium&utm_medium=referral)](https://cdn-images-1.medium.com/max/12000/0*Wexfei50ZXms6ocU)
+![由 [Maxwell Nelson](https://unsplash.com/@maxcodes?utm_source=medium&utm_medium=referral) 在 [Unsplash](https://unsplash.com?utm_source=medium&utm_medium=referral) 发布的图片](https://cdn-images-1.medium.com/max/12000/0*Wexfei50ZXms6ocU)
 
-I’ve spent the past 8 months developing complex applications in SwiftUI, including [Fave](https://apps.apple.com/us/app/fave-close-friends-only/id1541952688), which we recently put in the App Store. I’ve bumped into countless limitations and found workarounds to most of the challenges I’ve encountered.
+过去 8 个月我一直在用 SwiftUI 开发复杂的应用程序, 包括我们最近发布到 AppStore 的应用 —— [Fave](https://apps.apple.com/us/app/fave-close-friends-only/id1541952688)。尽管我遇到了无数此的限制，但我仍然找到了大多数问题的解决方法。
 
-In short, SwiftUI is a wonderful and very promising framework. I think it’s the future. But, it could be another 3–5 years until it reaches the same reliability and robustness as UIKit. However, that doesn’t mean you shouldn’t use SwiftUI today. My goal here is to help you understand the tradeoffs and drawbacks so you can make a more informed decision about whether SwiftUI is right for your next project.
+简而言之，SwiftUI 是一个美妙且非常有前途的框架。我认为 SwiftUI 就是未来。但是，要达到与 UIKit 相同的可靠性和稳健性，可能还需要 3 到 5 年的时间。但是，这并不意味着你今天不应该使用 SwiftUI。我的目标是帮助你权衡其优点和缺点，以便你可以就 SwiftUI 是否适合你的下一个项目做出更明智的决定。
 
-## The Good
+## 优点
 
-### 1. SwiftUI is a joy to write and you can build almost too fast
+### 1.SwiftUI 編寫起來很有趣，而且你可以十分快速地进行構建
 
-Gone are the days of `addSubview` and `sizeForItemAtIndexPath`, painstakingly calculating frames, wrestling with constraints, and building view hierarchies by hand. SwiftUI’s declarative and reactive design patterns make creating responsive layouts as easy as React, yet with Apple’s powerful UIKit under the hood. It’s incredibly fast to build views and get things up and running.
+`addSubview` 和 `sizeForItemAtIndexPath` 的日子已经一去不复返了，它们苦苦计算帧、与约束搏斗以及手动构建视图层次结构。SwiftUI 的声明式和反应式设计模式使创建响应式布局和 React 一样简单，而且他还使用了 Apple 强大的 UIKit。他构建视图并开始运行的速度非常快。
 
-### 2. SwiftUI simplifies cross-platform development
+### 2. SwiftUI 简化了跨平台开发
 
-One of the things I am most excited about is that you can write SwiftUI once and use it across iOS (iPhone & iPad), WatchOS, and macOS. It’s already problematic enough that you have to develop and maintain a separate codebase for Android and Windows, so every little bit helps in reducing the number of disparate codebases. There are still some drawbacks, which I’ll share in “The Bad” section.
+我最兴奋的一件事是，你可以编写一次 SwiftUI，然后在 iOS（iPhone 和 iPad）、WatchOS 和 macOS 上使用它。虽然你必须为 Android 和 Windows 开发和维护单独的代码库，这已经够麻烦了，但是任何一点的简化都有助于减少不同代码库的数量。还有一些缺点，我将在 '缺点' 的部分分享。
 
-### 3. You get beautiful transitions, animations, and components for free
+### 3. 你可以免费获得漂亮的过渡动画、动画和组件
 
-You can think of SwiftUI as an actual UI Kit that provides all of the building blocks you need to make professional-looking apps. And if you’re familiar with CSS transitions, SwiftUI has its own version of that which makes it super easy to create polished interactions. The beauty of the declarative syntax is that things “just work” and seem like magic, but there’s a shadow side too, which I’ll also get into later.
+你可以将 SwiftUI 视为一个实际提供了制作具有专业外观的应用程序所需的所有构建模块的 UI 套件。如果你熟悉 CSS 轉場，SwiftUI 有自己的版本，可以非常轻松地创建精美的交互。声明式语法的美妙之处在于事情能够 "正常工作" 并且看起来很神奇，但他也有一些缺点，我也会在后面介绍。
 
-### 4. The UI is entirely state-driven and reactive
+### 4. UI 完全是状态驱动和反应式的
 
-If you’re familiar with React, SwiftUI works just the same. Instead of callback hell, you’re changing `@State` and `@Binding` and `@Published` properties with delight as you watch your entire UI “react”, animations and all. You leverage the power of `Combine` with `ObservableObject`and `@StateObject`. This aspect is one of the coolest departures from UIKit and feels incredibly powerful.
+如果你熟悉 React，SwiftUI 的工作原理是一样的。当你观看整个 UI "反应"、动画和所有内容时，你将会高兴地更改 `@State`、`@Binding` 和 `@Published` 属性，而不是回调地狱。你可以利用 `Combine` 与 `ObservableObject` 和 `@StateObject` 的强大功能。这方面是 UIKit 最酷的变化之一，而且它非常强大。
 
-### 5. The community is embracing SwiftUI
+### 5. 社区正在拥抱 SwiftUI
 
-Pretty much everyone is excited about SwiftUI. There are so many resources available to learn SwiftUI, from WWDC, to books, to blogs — the information is there, you just have to search for it. Or not, I’ve put together a list of the best community resources here.
+几乎每个人都对 SwiftUI 感到兴奋。有很多资源可用于学习 SwiftUI，从 WWDC，到书籍，再到博客 —— 信息都在那里，你只需要搜索它。或者，我在这里汇总了一份最佳社区资源列表。
 
-Having a vibrant and supportive community will accelerate learning, development, and plenty of new libraries will emerge to make SwiftUI even more versatile.
+拥有一个充满活力和支持的社区将加速学习和开发，大量新库的出现将使 SwiftUI 更加通用。
 
 ## The Bad
 
@@ -49,9 +49,9 @@ There is a solution by using`UIViewRepresentable` `UIViewControllerRepresentable
 
 These bridges are a great stopgap to make up for the missing functionality that SwiftUI has, but it’s not always a seamless experience. Furthermore, while the cross-platform promise of SwiftUI is great, if something’s not available you’ll still need to implement bridge code twice for iOS and Mac.
 
-### 2. NavigationView is not really there yet
+### 2. NavigationView 还没有真正存在
 
-If you want to hide the navigation bar and still have the swipe gesture work, you can’t. I ended up creating a [UINavigationController wrapper](https://gist.github.com/chrysb/d7d85e20d8c94fd3e0b753a4abd1c941) from some code I found. It works but it’s not a great solution long-term.
+如果你想隐藏导航栏并且仍然可以使用滑动手势，你不能这么做。迫于无奈，我最后参考了一些我找到的代码，并制作了一个 [UINavigationController 包装器](https://gist.github.com/chrysb/d7d85e20d8c94fd3e0b753a4abd1c941)。他可以正常工作但是这不是一个长远的解决办法。
 
 If you want to have a SplitView on iPad, you can’t show the master and detail view together yet in portrait mode. They chose an awkward use of a button to reveal a drawer, which is closed by default. Apparently, you can solve this problem by adding padding, which highlights the kind of things you have to do when wrangling SwiftUI.
 
